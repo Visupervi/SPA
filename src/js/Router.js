@@ -7,6 +7,7 @@ import shopCart from "../components/tabbars/ShopCartComponent.vue"
 import newsList from "../components/news/newslist.vue"
 import newsInfo from "../components/news/newsInfo.vue"
 import shareImg from "../components/imgs/shareImg.vue"
+import imgInfo from "../components/imgs/imginfo.vue"
 
 // 2.1 导入路由模块
 import VueRouter from 'vue-router'
@@ -22,7 +23,8 @@ const router = new VueRouter({
     { path:"/shopCart",component:shopCart},
     { path:"/home/newslist" ,component:newsList},
     { path:"/home/newsInfo/:id",component:newsInfo},
-    { path:"/home/shareImg",component:shareImg}
+    { path:"/home/shareImg",component:shareImg},
+    { path:"/home/imginfo/:id",component:imgInfo}
   ],
    linkActiveClass: 'mui-active'   //  官方 默认的 激活类名 是 router-link-active
 });

@@ -10,7 +10,7 @@
     </div>
 
      <ul>
-      <li v-for="item in photoList" :key="item.id" >
+      <li v-for="item in photoList" :key="item.id" @click="goImgInfo(item.id)" >
         <img v-lazy="baseUrl + item.img_url">
         <div class="info">
           <h4>{{item.title}}</h4>
@@ -66,6 +66,10 @@ import config from "../../js/Webconfig.js";
       reloadImgList(Id){
         this.categoryId = Id;
         this.getImgList();
+      },
+      goImgInfo(id){
+        this.$router.push("/home/imginfo/" + id);
+
       }
     }
   }
