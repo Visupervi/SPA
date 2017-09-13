@@ -32,7 +32,9 @@ import"./lib/mui/css/icons-extra.css"
 import App from './components/App.vue'
 import moment from "moment"
 
-
+//  注册 缩略图预览插件
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
 Vue.filter("dataFormat",function(val,pattern="YYYY-MM-DD hh:mm:ss"){
 return moment(val).format(pattern);
 })

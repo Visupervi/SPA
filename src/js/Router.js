@@ -8,6 +8,8 @@ import newsList from "../components/news/newslist.vue"
 import newsInfo from "../components/news/newsInfo.vue"
 import shareImg from "../components/imgs/shareImg.vue"
 import imgInfo from "../components/imgs/imginfo.vue"
+import productList from "../components/product/productList.vue"
+import prodocutInfo from "../components/product/productInfo.vue"
 
 // 2.1 导入路由模块
 import VueRouter from 'vue-router'
@@ -24,7 +26,9 @@ const router = new VueRouter({
     { path:"/home/newslist" ,component:newsList},
     { path:"/home/newsInfo/:id",component:newsInfo},
     { path:"/home/shareImg",component:shareImg},
-    { path:"/home/imginfo/:id",component:imgInfo}
+    { path:"/home/imginfo/:id",component:imgInfo},
+    { path:"/home/productList",component:productList},
+    { path:"/home/productInfo",component:prodocutInfo}
   ],
    linkActiveClass: 'mui-active'   //  官方 默认的 激活类名 是 router-link-active
 });
