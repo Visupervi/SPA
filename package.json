@@ -37,6 +37,7 @@
     "vue-compiler": "^2.0.0",
     "vue-loader": "^13.0.4",
     "vue-preview": "^1.0.5",
+    "vuex": "^2.4.0",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   }

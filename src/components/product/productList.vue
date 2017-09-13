@@ -54,12 +54,11 @@
     goDetail(id) { // 跳转到商品详情页面
       // 这是第一种编程式导航的实现方式，在调用 push 方法的时候，直接传递了一个 路由的链接
       // this.$router.push('/home/goodsinfo/' + id);
-
       // 下面的是第二种编程式导航实现方式，在调用 push 的时候，传递一个 配置对象进去，在配置对象身上，有 两个主要的属性：
       //   属性1： name, 表示在注册路由规则的时候，为 路由规则 起的 name 名称
       //   属性2： params 对象，表示 要在路由中传递的参数
       // this.$router.push({ name: '', params: {} });
-      this.$router.push({ name: 'goodsinfo', params: { id } });
+      this.$router.push({ name: 'productInfo', params: { id } });
     }
   }
 }

@@ -9,7 +9,9 @@ import newsInfo from "../components/news/newsInfo.vue"
 import shareImg from "../components/imgs/shareImg.vue"
 import imgInfo from "../components/imgs/imginfo.vue"
 import productList from "../components/product/productList.vue"
-import prodocutInfo from "../components/product/productInfo.vue"
+import ProductInfo from "../components/product/productInfo.vue"
+import Productdesc from "../components//product/productdesc.vue"
+import Productcomment from "../components/product/productcomment.vue"
 
 // 2.1 导入路由模块
 import VueRouter from 'vue-router'
@@ -18,18 +20,20 @@ Vue.use(VueRouter);
 // 2.3 创建路由对象
 const router = new VueRouter({
   routes: [
-    { path: '/', redirect: '/home' },
-    { path: '/home', component: home },
-    { path: '/member', component: member },
-    { path:"/search",component:search},
-    { path:"/shopCart",component:shopCart},
-    { path:"/home/newslist" ,component:newsList},
-    { path:"/home/newsInfo/:id",component:newsInfo},
-    { path:"/home/shareImg",component:shareImg},
-    { path:"/home/imginfo/:id",component:imgInfo},
-    { path:"/home/productList",component:productList},
-    { path:"/home/productInfo",component:prodocutInfo}
+  { path: '/', redirect: '/home' },
+  { path: '/home', component: home },
+  { path: '/member', component: member },
+  { path:"/search",component:search},
+  { path:"/shopCart",component:shopCart},
+  { path:"/home/newslist" ,component:newsList},
+  { path:"/home/newsInfo/:id",component:newsInfo},
+  { path:"/home/shareImg",component:shareImg},
+  { path:"/home/imginfo/:id",component:imgInfo},
+  { path:"/home/productList",component:productList},
+  { path:"/home/productInfo/:id",component:ProductInfo,name:"productInfo"},
+  { path:"/home/productdesc/:id",component:Productdesc},
+  { path:"/home/productcomment/:id",component:Productcomment}
   ],
    linkActiveClass: 'mui-active'   //  官方 默认的 激活类名 是 router-link-active
-});
+ });
 export default router;
