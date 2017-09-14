@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <mt-header fixed title="Visupervi">
-      <router-link to="/" slot="left">
+      <a slot="left" @click.prevent="goback" v-if="isshowBack">
+        <mt-button icon="back">返回</mt-button>
+      </a>
       <mt-button icon="back">返回</mt-button>
       </router-link>
     </mt-header>
@@ -18,7 +20,7 @@
         </router-link>
         <router-link class="mui-tab-item1" to="/shopCart">
           <span class="mui-icon mui-icon-extra mui-icon-extra-cart">
-            <span class="mui-badge">0</span>
+            <span class="mui-badge">{{count}}</span>
           </span>
           <span class="mui-tab-label">购物车</span>
         </router-link>
@@ -30,6 +32,46 @@
   </div>
 </template>
 <script>
+export default {
+  data() {
+    return {
+      isshowBack: false
+    }
+  },
+  created() {
+    if (this.$route.path === '/home') {
+      this.isshowBack = false;
+    } else {
+      this.isshowBack = true;
+    }
+  },
+  methods: {
+    goback() { // 点击后退
+      this.$router.go(-1);
+    }
+  },
+  computed: {
+    'count': function() {
+      // 购物车中所有商品的总数量，应该从 store 中的 car 身上获取
+      var c = 0;
+      this.$store.state.car.forEach(item => {
+        c += item.count;
+      });
+      return c;
+    }
+  },
+  watch: {
+    '$route': function(newVal) {
+      // console.log(newVal);
+      // 如果 路径等于 /home，则隐藏 后退按钮
+      if (newVal.path === '/home') {
+        this.isshowBack = false;
+      } else {
+        this.isshowBack = true;
+      }
+    }
+  }
+}
 </script>
 <style type="text/less">
   .app{

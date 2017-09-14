@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
-
 var goods = JSON.parse(localStorage.getItem('goods') || '[]');
-
 // 创建并导出一个 公共的 store 对象
 export default new Vuex.Store({
   state: {

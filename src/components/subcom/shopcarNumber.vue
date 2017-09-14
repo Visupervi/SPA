@@ -1,5 +1,5 @@
 <template>
-  <div class="mui-numbox" data-numbox-min='1' style="height:28px;">
+  <div class="mui-numbox" data-numbox-step = "1" data-numbox-min="1" style="height:28px;">
     <button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
     <input ref="numbox" class="mui-input-numbox" type="number" :value="initcount" @change="numChage" readonly />
     <button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
@@ -34,6 +34,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>

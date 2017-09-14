@@ -1,5 +1,10 @@
 <template>
   <div class="tmpl">
+
+    <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+      <div class="ball" v-show="isshow"></div>
+    </transition>
+
     <!-- 轮播图区域 -->
     <div class="mui-card">
       <div class="mui-card-content">
@@ -8,37 +13,45 @@
         </div>
       </div>
     </div>
+
+    <!-- 商品购买区域 -->
     <div class="mui-card">
-      <div class="mui-card-header">{{productList.title}}</div>
+      <div class="mui-card-header">{{goodsInfo.title}}</div>
       <div class="mui-card-content">
         <div class="mui-card-content-inner">
+
           <div class="price">
             <span>市场价：
-              <del>￥{{productList.market_price}}</del>
+              <del>￥{{goodsInfo.market_price}}</del>
             </span>&nbsp;&nbsp;&nbsp;&nbsp;
             <span>销售价：
-              <span class="sale_price">￥{{productList.sell_price}}</span>
+              <span class="sale_price">￥{{goodsInfo.sell_price}}</span>
             </span>
           </div>
+
           <div class="count">
             <span>购买数量：</span>
-            <numberBox></numberBox>
+            <!-- 在使用 number box的时候，把最大值传递进去 -->
+            <numberbox :maxcount="goodsInfo.stock_quantity" @getNum="getNum"></numberbox>
           </div>
+
           <div class="btns">
             <mt-button type="primary" size="small">立即购买</mt-button>
-            <mt-button type="danger" size="small">加入购物车</mt-button>
+            <mt-button type="danger" size="small" @click="addToShopCar">加入购物车</mt-button>
           </div>
+
         </div>
       </div>
     </div>
+
     <!-- 商品参数区域 -->
     <div class="mui-card">
       <div class="mui-card-header">商品参数</div>
       <div class="mui-card-content">
         <div class="mui-card-content-inner">
-          <p>商品货号：{{productList.goods_no}}</p>
-          <p>库存情况：{{productList.stock_quantity}}件</p>
-          <p>上架时间：{{productList.add_time | dataFormat}}</p>
+          <p>商品货号：{{goodsInfo.goods_no}}</p>
+          <p>库存情况：{{goodsInfo.stock_quantity}}件</p>
+          <p>上架时间：{{goodsInfo.add_time | dataFormat}}</p>
         </div>
       </div>
       <div class="mui-card-footer">
@@ -47,54 +60,79 @@
         <mt-button type="danger" size="large" plain @click="goComment(id)">商品评论</mt-button>
       </div>
     </div>
+
   </div>
 </template>
 <script type="text/javascript">
   import swipe from "../subcom/swipe.vue"
   import config from "../../js/Webconfig.js"
-  import numberBox from "../subcom/number.vue"
+  import numberbox from "../subcom/number.vue"
   export default {
-    data(){
-      return {
-        id:this.$route.params.id,
-        lunboList:[],
-        productList:{}
-      }
+     data() {
+    return {
+      id: this.$route.params.id, // 商品Id
+      lunboList: [], // 存放轮播图的数组
+      goodsInfo: {}, // 要展示的商品详情数据
+      isshow: false,
+      goodsCount: 1 // 默认选中的商品数量
+    }
+  },
+  created() {
+    this.getLunbo();
+    this.getGoodsInfo();
+  },
+  methods: {
+    getLunbo() {
+      // 注意：获取轮播图的 API 地址，和 获取 图片详情缩略图 是同一个API，地址都为 /api/getthumimages/:imgid
+      this.$http.get('api/getthumimages/' + this.id).then(res => {
+        if (res.body.status === 0) {
+          // 循环每一个获取到的轮播图数据对象，改造成合法的，可以交给 轮播图组件展示的 数据
+          res.body.message.forEach(item => {
+            item.img = config.imgBaseURL + item.src;
+          });
+          // 把获取到的数据， 保存到 data 上
+          this.lunboList = res.body.message;
+        } else {
+          console.log('获取轮播图数据失败！');
+        }
+      });
     },
-    created(){
-      this.getLunbo();
-      this.getProductInfo();
+    getGoodsInfo() { // 获取商品的详情
+      this.$http.get('api/goods/getinfo/' + this.id).then(res => {
+        if (res.body.status === 0) {
+          this.goodsInfo = res.body.message[0];
+        } else {
+          console.log('获取商品详情失败！');
+        }
+      });
     },
-    methods:{
-      getLunbo(){
-        this.$http.get("api/getthumimages/" + this.id).then(res=>{
-          if(res.body.status === 0){
-            res.body.message.forEach(item =>{
-              item.img = config.imgBaseURL + item.src;
-            });
-            this.lunboList = res.body.message;
-          }else{
-            console.log("获取失败");
-          }
-        });
-      },
-      getProductInfo(){
-        this.$http.get("api/goods/getinfo/"+this.id).then(res =>{
-          if(res.body.status === 0){
-            this.productList = res.body.message[0];
-          }else{
-            console.log("获取失败");
-          }
-        });
-      },
-      goDesc(id){
-        this.$router.push("/home/productdesc/" + id);
-      },
-      goComment(id){
-        this.$router.push("/home/productcomment/" + id)
-      }
+    goDesc(id) { // 点击跳转到商品描述页面
+      this.$router.push('/home/productdesc/' + id);
     },
-    components:{swipe,numberBox}
+    goComment(id) { // 点击跳转到商品评论
+      this.$router.push('/home/productcomment/' + id);
+    },
+    addToShopCar() { // 点击添加到购物车
+      this.isshow = !this.isshow;
+      // 每当点击 添加购物车按钮，触发 store 上的 addToShopCar 方法，将商品添加到购物车
+      this.$store.commit('addToShopCar', { id: this.id, count: this.goodsCount });
+    },
+    beforeEnter(el) {
+      el.style.transform = "translate(0, 0)";
+    },
+    enter(el, done) {
+      el.offsetWidth;
+      el.style.transform = "translate(86px, " + (225 + window.pageYOffset) + "px)";
+      done();
+    },
+    afterEnter(el) {
+      this.isshow = !this.isshow;
+    },
+    getNum(num) { // 父组件获取子组件传递过来的 商品数量
+      this.goodsCount = num;
+    }
+  },
+  components: {swipe, numberbox }
   }
 </script>
 <style type="text/less" scoped>
